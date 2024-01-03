@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">FinanzApp</string>
+    <string name="total_outgoings">Gesamt Ausgaben:</string>
+</resources>
