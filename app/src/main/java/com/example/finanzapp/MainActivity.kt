@@ -1,5 +1,6 @@
 package com.example.finanzapp
 
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -33,8 +34,12 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.finanzapp.objects.OutgoingsEntry
 import com.example.finanzapp.ui.theme.FinanzAppTheme
+import java.time.LocalDate
+import java.util.Calendar
 import kotlin.math.pow
+import kotlin.math.round
 
 class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
@@ -43,8 +48,9 @@ class MainActivity : ComponentActivity() {
         setContent {
             FinanzAppTheme {
                 val kc = LocalSoftwareKeyboardController.current
+                var description by remember { mutableStateOf("") }
                 var outgoing by remember { mutableStateOf("") }
-                var outgoings by remember { mutableStateOf(listOf<String>()) }
+                var outgoings by remember { mutableStateOf(listOf<OutgoingsEntry>()) }
                 var totalOutgoings by remember { mutableStateOf("0") }
                 var result by remember { mutableStateOf("") }
                 val callback = {
@@ -89,8 +95,8 @@ class MainActivity : ComponentActivity() {
                                 outgoing = outgoing.replace(",", ".")
                             }
                             if(outgoing.isNotBlank()) {
-                                outgoings = outgoings + outgoing
-                                totalOutgoings = (totalOutgoings.toDouble() + outgoing.toDouble()).toString()
+                                outgoings = outgoings + OutgoingsEntry(outgoing, description, Calendar.getInstance())
+                                totalOutgoings = (round(totalOutgoings.toDouble() + outgoing.toDouble()*100)/100).toString()
                                 outgoing = ""
                             }
                         }) {
@@ -98,9 +104,9 @@ class MainActivity : ComponentActivity() {
                         }
                     }
                     LazyColumn {
-                        items(outgoings) { currentName ->
+                        items(outgoings) { currentOutgoing ->
                             Text(
-                                text = currentName,
+                                text = currentOutgoing.value,
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .padding(16.dp)

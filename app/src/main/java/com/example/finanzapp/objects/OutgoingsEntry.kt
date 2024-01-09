@@ -1,7 +1,7 @@
 package com.example.finanzapp.objects
 
-import java.time.LocalDate
+import java.util.Calendar
 
-data class OutgoingsEntry (val value: String, val description: String, val date: LocalDate) {
+data class OutgoingsEntry (val value: String, val description: String, val date: Calendar) {
 
 }
