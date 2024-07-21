@@ -77,6 +77,22 @@ fun AddScreen(navController: NavController){
                 modifier = Modifier.weight(1f)
             )
             Spacer(modifier = Modifier.width(16.dp))
+            OutlinedTextField(
+                value = description,
+                onValueChange = { text ->
+                    description = text
+                },
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Text,
+                    imeAction = ImeAction.Done
+                ),
+                keyboardActions = KeyboardActions(
+                    onDone = {
+                        callback()
+                    }
+                ),
+                modifier = Modifier.weight(1f)
+            )
             Button(onClick = {
                 if (outgoing.contains(",")) {
                     outgoing = outgoing.replace(",", ".")
@@ -84,9 +100,10 @@ fun AddScreen(navController: NavController){
                 if (outgoing.isNotBlank()) {
                     totalOutgoings =
                         (round(totalOutgoings.toDouble() + outgoing.toDouble() * 100) / 100).toString()
-                    outgoing = ""
                 }
-                navController.navigate(Screen.AddScreen.withArgs(outgoing, " "))
+                navController.navigate(Screen.MainScreen.withArgs(outgoing, description))
+                outgoing = ""
+                description = ""
             }) {
                 Text(text = "Add")
             }

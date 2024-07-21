@@ -10,16 +10,18 @@ import androidx.navigation.navArgument
 @Composable
 fun Navigation(){
     val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = Screen.MainScreen.route) {
+    NavHost(navController = navController, startDestination = Screen.MainScreen.route + "/{outgoing}/{description}") {
         composable(
             route = Screen.MainScreen.route + "/{outgoing}/{description}",
             arguments = listOf(
                 navArgument("outgoing"){
                     type = NavType.StringType
+                    defaultValue = "0"
                     nullable = false
                 },
                 navArgument("description"){
                     type = NavType.StringType
+                    defaultValue = ""
                     nullable = false
                 }
                 )
