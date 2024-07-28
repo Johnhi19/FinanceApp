@@ -45,7 +45,8 @@ fun MainScreen(navController: NavController, outgoing: String, description: Stri
     Spacer(modifier = Modifier.height(16.dp))
     Button(onClick = {
         navController.navigate(Screen.AddScreen.route)
-    }) {
+    },
+        modifier = Modifier.fillMaxWidth()) {
         Text(text = "Add new outgoing")
     }
 }

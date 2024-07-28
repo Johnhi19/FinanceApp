@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardActions
@@ -34,7 +35,7 @@ import kotlin.math.round
 
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterial3Api::class)
 @Composable
-fun AddScreen(navController: NavController){
+fun AddScreen(navController: NavController) {
     val kc = LocalSoftwareKeyboardController.current
     var description by remember { mutableStateOf("") }
     var outgoing by remember { mutableStateOf("") }
@@ -49,12 +50,13 @@ fun AddScreen(navController: NavController){
         }
         kc?.hide()
     }
-    Column (
+    Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp)
     ) {
-        Text(text = stringResource(R.string.total_outgoings) + " " + totalOutgoings + "€")
+        Text(text = stringResource(R.string.amount))
+        Spacer(modifier = Modifier.height(16.dp))
         Row(
             modifier = Modifier.fillMaxWidth()
         ) {
@@ -76,7 +78,13 @@ fun AddScreen(navController: NavController){
                 ),
                 modifier = Modifier.weight(1f)
             )
-            Spacer(modifier = Modifier.width(16.dp))
+        }
+        Spacer(modifier = Modifier.height(16.dp))
+        Text(text = stringResource(id = R.string.description))
+        Spacer(modifier = Modifier.height(16.dp))
+        Row(
+            modifier = Modifier.fillMaxWidth()
+        ) {
             OutlinedTextField(
                 value = description,
                 onValueChange = { text ->
@@ -93,6 +101,11 @@ fun AddScreen(navController: NavController){
                 ),
                 modifier = Modifier.weight(1f)
             )
+        }
+        Spacer(modifier = Modifier.height(16.dp))
+        Row(
+            modifier = Modifier.fillMaxWidth()
+        ) {
             Button(onClick = {
                 if (outgoing.contains(",")) {
                     outgoing = outgoing.replace(",", ".")
@@ -104,7 +117,8 @@ fun AddScreen(navController: NavController){
                 navController.navigate(Screen.MainScreen.withArgs(outgoing, description))
                 outgoing = ""
                 description = ""
-            }) {
+            },
+                modifier = Modifier.fillMaxWidth()) {
                 Text(text = "Add")
             }
         }
