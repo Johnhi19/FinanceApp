@@ -2,7 +2,10 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("kotlin-parcelize")
+    id("com.google.devtools.ksp")
 }
+
+apply(plugin = "com.google.devtools.ksp")
 
 android {
     namespace = "com.example.finanzapp"
@@ -41,7 +44,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.3"
+        kotlinCompilerExtensionVersion = "1.5.13"
     }
     packaging {
         resources {
@@ -62,8 +65,8 @@ dependencies {
     implementation("androidx.compose.material3:material3")
     implementation("androidx.compose.ui:ui-android:1.5.4")
     implementation("androidx.room:room-runtime:2.4.1")
-    implementation("androidx.room:room-ktx:2.4.1")
-    annotationProcessor("androidx.room:room-compiler:2.4.1")
+    implementation("androidx.room:room-ktx:2.5.0")
+    ksp("androidx.room:room-compiler:2.5.0")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")

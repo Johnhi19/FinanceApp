@@ -1,5 +1,14 @@
 package com.example.finanzapp.objects
 
-import java.util.Calendar
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 
-data class OutgoingsEntry (val value: String, val description: String, val date: Calendar)
+@Entity
+data class OutgoingsEntry(
+    val value: String,
+    val description: String,
+    val date: String,
+    @PrimaryKey(autoGenerate = true)
+    val id: Int = 0,
+)
+

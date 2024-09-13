@@ -1,126 +1,74 @@
 package com.example.finanzapp.navigation
 
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
-import com.example.finanzapp.R
-import com.example.finanzapp.objects.OutgoingsEntry
-import java.util.Calendar
-import kotlin.math.pow
-import kotlin.math.round
+import com.example.finanzapp.ContactEvent
+import com.example.finanzapp.ContactState
 
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterial3Api::class)
 @Composable
-fun AddScreen(navController: NavController) {
-    val kc = LocalSoftwareKeyboardController.current
-    var description by remember { mutableStateOf("") }
-    var outgoing by remember { mutableStateOf("") }
-    var totalOutgoings by remember { mutableStateOf("0") }
-    var result by remember { mutableStateOf("") }
-    val callback = {
-        result = try {
-            val num = outgoing.toFloat()
-            num.pow(2.0F).toString()
-        } catch (ex: NumberFormatException) {
-            ""
-        }
-        kc?.hide()
-    }
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
+fun AddScreen(
+    state: ContactState,
+    onEvent: (ContactEvent) -> Unit,
+    modifier: Modifier = Modifier,
     ) {
-        Text(text = stringResource(R.string.amount))
-        Spacer(modifier = Modifier.height(16.dp))
-        Row(
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            OutlinedTextField(
-                value = outgoing,
-                onValueChange = { text ->
-                    if (text.matches(Regex("^[1-9][0-9]*(\\.\\d{0,2}|,\\d{0,2})?$"))) {
-                        outgoing = text
-                    }
-                },
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Number,
-                    imeAction = ImeAction.Done
-                ),
-                keyboardActions = KeyboardActions(
-                    onDone = {
-                        callback()
-                    }
-                ),
-                modifier = Modifier.weight(1f)
-            )
-        }
-        Spacer(modifier = Modifier.height(16.dp))
-        Text(text = stringResource(id = R.string.description))
-        Spacer(modifier = Modifier.height(16.dp))
-        Row(
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            OutlinedTextField(
-                value = description,
-                onValueChange = { text ->
-                    description = text
-                },
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Text,
-                    imeAction = ImeAction.Done
-                ),
-                keyboardActions = KeyboardActions(
-                    onDone = {
-                        callback()
-                    }
-                ),
-                modifier = Modifier.weight(1f)
-            )
-        }
-        Spacer(modifier = Modifier.height(16.dp))
-        Row(
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Button(onClick = {
-                if (outgoing.contains(",")) {
-                    outgoing = outgoing.replace(",", ".")
+    AlertDialog(
+        modifier = modifier,
+        onDismissRequest = {
+            onEvent(ContactEvent.HideDialog) },
+        confirmButton = {
+            Box(
+                modifier = Modifier.fillMaxWidth(),
+                contentAlignment = Alignment.CenterEnd
+            ){
+                Button(onClick = {
+                    onEvent(ContactEvent.SaveOutgoingsEntry)
+                }) {
+                    Text(text = "Save Outgoing")
                 }
-                if (outgoing.isNotBlank()) {
-                    totalOutgoings =
-                        (round(totalOutgoings.toDouble() + outgoing.toDouble() * 100) / 100).toString()
-                }
-                navController.navigate(Screen.MainScreen.withArgs(outgoing, description))
-                outgoing = ""
-                description = ""
-            },
-                modifier = Modifier.fillMaxWidth()) {
-                Text(text = "Add")
             }
-        }
-    }
+        },
+        title = {
+            Text(text = "Add new outgoing")
+        },
+        text = {
+           Column(
+               verticalArrangement = Arrangement.spacedBy(16.dp),
+           ) {
+                TextField(
+                    value = state.value,
+                    onValueChange = {
+                        onEvent(ContactEvent.SetValue(it))
+                    },
+                    placeholder = { Text("Amount") },
+                )
+               TextField(
+                   value = state.description,
+                   onValueChange = {
+                       onEvent(ContactEvent.SetDescription(it))
+                   },
+                   placeholder = { Text("Description") },
+               )
+               TextField(
+                   value = state.date,
+                   onValueChange = {
+                       onEvent(ContactEvent.SetDate(it))
+                   },
+                   placeholder = { Text("Date") },
+               )
+           }
+        },
+    )
 }
