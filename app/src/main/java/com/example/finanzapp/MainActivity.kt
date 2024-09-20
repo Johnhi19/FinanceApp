@@ -37,7 +37,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             FinanzAppTheme {
-                val state by viewModel._state.collectAsState()
+                val state by viewModel.state.collectAsState()
                     MainScreen(state = state, onEvent = viewModel::onEvent)
             }
         }
