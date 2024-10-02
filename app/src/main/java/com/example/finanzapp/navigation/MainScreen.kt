@@ -25,7 +25,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.finanzapp.ContactEvent
 import com.example.finanzapp.ContactState
-import java.time.LocalDate
+import java.text.DecimalFormat
+import java.text.DecimalFormatSymbols
 import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -59,6 +60,17 @@ fun MainScreen(
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
+            item(state.outgoings){
+                val total = state.outgoings.sumOf { it.value.toDouble() }
+                val formattedTotal = DecimalFormat("#.##", DecimalFormatSymbols(Locale.US)).format(total)
+
+                Text(
+                    text = "Total: $formattedTotal €",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp)
+                )
+            }
             items(state.outgoings) { currentOutgoing ->
                 Row(
                     modifier = Modifier.fillMaxWidth()
@@ -67,7 +79,7 @@ fun MainScreen(
                         modifier = Modifier.weight(0.5f)
                     ) {
                         Text(
-                            text = currentOutgoing.value,
+                            text = currentOutgoing.value + "€",
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(8.dp)
@@ -82,8 +94,13 @@ fun MainScreen(
                     Column(
                         modifier = Modifier.weight(0.5f)
                     ) {
+                        val inputFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+                        val outputFormat = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
+                        val date = inputFormat.parse(currentOutgoing.date)
+                        val formattedDate = outputFormat.format(date)
+
                         Text(
-                            text = currentOutgoing.date,
+                            text = formattedDate,
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(8.dp)

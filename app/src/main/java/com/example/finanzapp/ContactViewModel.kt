@@ -9,7 +9,6 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import java.util.Calendar
 
 class ContactViewModel(
     private val dao: OutgoingsDao
@@ -55,8 +54,9 @@ class ContactViewModel(
                     return
                 }
 
+                val transformedValue = value.replace(',', '.')
                 val outgoingsEntry = OutgoingsEntry(
-                    value = value,
+                    value = transformedValue,
                     description = description,
                     date = date
                 )
