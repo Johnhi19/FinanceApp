@@ -3,6 +3,7 @@ package com.example.finanzapp.navigation
 import android.icu.text.SimpleDateFormat
 import android.icu.util.Calendar
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -24,6 +25,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.finanzapp.ContactEvent
@@ -68,8 +70,6 @@ fun MainScreen(
         }
         val groupedOutgoings = groupOutgoingsByMonth(state.outgoings.reversed())
         val listState = rememberLazyListState()
-        val total = state.outgoings.sumOf { it.value.toDouble() }
-        val formattedTotal = DecimalFormat("#.##", DecimalFormatSymbols(Locale.US)).format(total)
 
         LazyColumn(
             state = listState,
@@ -78,6 +78,8 @@ fun MainScreen(
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             groupedOutgoings.forEach { (month, outgoings) ->
+                val total = outgoings.sumOf { it.value.toDouble() }
+                val formattedTotal = DecimalFormat("#.##", DecimalFormatSymbols(Locale.US)).format(total)
                 stickyHeader {
                     Text(
                         text = month + " - " + formattedTotal + "€",
@@ -87,9 +89,9 @@ fun MainScreen(
                     )
                     Divider(thickness = 3.dp)
                 }
-                items(state.outgoings.reversed()) { currentOutgoing ->
+                items(outgoings) { currentOutgoing ->
                     Row(
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier.fillMaxWidth(),
                     ) {
                         Column(
                             modifier = Modifier.weight(0.5f)
