@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -13,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.example.finanzapp.ContactEvent
 import com.example.finanzapp.ContactState
@@ -49,10 +51,15 @@ fun AddScreen(
            ) {
                 TextField(
                     value = state.value,
-                    onValueChange = {
-                        onEvent(ContactEvent.SetValue(it))
+                    onValueChange = { newValue ->
+                        if (newValue.count { it == '.' } <= 1 && newValue.substringAfterLast('.', "").length <= 2) {
+                            onEvent(ContactEvent.SetValue(newValue))
+                        } else if (newValue.count { it == '.' } == 1 && newValue.substringAfterLast('.', "").length > 2) {
+                            onEvent(ContactEvent.SetValue(state.value))
+                        }
                     },
                     placeholder = { Text("Amount") },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
                 )
                TextField(
                    value = state.description,

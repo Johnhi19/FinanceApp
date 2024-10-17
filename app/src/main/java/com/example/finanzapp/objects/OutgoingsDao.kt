@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface OutgoingsDao {
-    @Query("SELECT * FROM OutgoingsEntry")
+    @Query("SELECT * FROM OutgoingsEntry ORDER BY date ASC")
     fun getAll(): Flow<List<OutgoingsEntry>>
 
     @Insert

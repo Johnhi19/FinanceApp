@@ -35,7 +35,7 @@ import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
 import java.util.Locale
 
-fun groupOutgoingsByMonth(outgoings: List<OutgoingsEntry>): Map<String, List<OutgoingsEntry>> {
+private fun groupOutgoingsByMonth(outgoings: List<OutgoingsEntry>): Map<String, List<OutgoingsEntry>> {
     val formatMonthYear = SimpleDateFormat("MMMM yyyy", Locale.getDefault())
     return outgoings.groupBy { outgoing ->
         val date = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(outgoing.date)
