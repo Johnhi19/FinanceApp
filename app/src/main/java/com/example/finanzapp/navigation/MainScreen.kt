@@ -100,13 +100,13 @@ fun MainScreen(
                                 text = currentOutgoing.value + "€",
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .padding(8.dp)
+                                    .padding(start = 16.dp, top = 8.dp, bottom = 8.dp),
                             )
                             Text(
                                 text = currentOutgoing.description,
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .padding(8.dp)
+                                    .padding(start = 16.dp, top = 8.dp, bottom = 8.dp),
                             )
                         }
                         Column(
